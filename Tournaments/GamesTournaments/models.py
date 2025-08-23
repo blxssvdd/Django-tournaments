@@ -5,10 +5,13 @@ class Tournament(models.Model):
     name = models.CharField(max_length=100, default=None, null=True)
     location = models.CharField(max_length=100, default=None, null=True)
     description = models.TextField(default=None, null=True)
+    count = models.IntegerField(default=0, null=True)
+    date = models.DateField(default=None, null=True)
+    players = models.ManyToManyField("Player", default=None, null=True)
 
 
     def __str__(self):
-        return f"Турнір: {self.name}, Місце: {self.location}"
+        return f"Турнір: {self.name}, Місце: {self.location}, Дата: {self.date}, Кількість гравців: {self.players.all()}"
 
 
 class Team(models.Model):

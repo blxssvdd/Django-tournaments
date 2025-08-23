@@ -113,7 +113,6 @@ def add_team(request):
             )
             team.save()
             team.players.set(players)
-            team.tournament.set(tournament)
             return redirect("get_teams")
 
         return redirect("add_team")

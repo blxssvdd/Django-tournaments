@@ -6,7 +6,6 @@
         <tr>
             <th>№</th>
             <th>Назва турніру</th>
-            <th>Кількість турнірів</th>
             <th>Дата проведення</th>
             <th>Кількість гравців</th>
         </tr>
@@ -14,11 +13,14 @@
     <tbody>
         {% for tournament in tournaments %}
             <tr>
-                <td>{{ loop.index }}</td>
+                <td>{{ tournament.id }}</td>
                 <td>{{ tournament.name }}</td>
-                <td>{{ tournament.count }}</td>
                 <td>{{ tournament.date }}</td>
-                <td>{{ tournament.players }}</td>
+                <td>
+                    {% for player in tournament.players.all %}
+                        {{ player.name }},
+                    {% endfor %}
+                </td>
             </tr>
         {% endfor %}
     </tbody>
