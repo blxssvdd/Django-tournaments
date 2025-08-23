@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Нікнейм</th>
+            <th>Турнір</th>
+            <th>Інформація про гравця</th>
+            <th>Команда</th>
+            <th>Список турнірів</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for player in players %}
+            <tr>
+                <td>{{ player.id }}</td>
+                <td>{{ player.name }}</td>
+                <td>{{ player.tournament }}</td>
+                <td>{{ player.description }}</td>
+                <td>{{ player.tournament }}</td>
+                <td>
+                    {% for tournament in user.tournaments.all %}
+                        {{ tournament }},
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}
