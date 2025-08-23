@@ -7,11 +7,11 @@ class Tournament(models.Model):
     description = models.TextField(default=None, null=True)
     count = models.IntegerField(default=0, null=True)
     date = models.DateField(default=None, null=True)
-    players = models.ManyToManyField("Player", default=None, null=True)
+    teams = models.ManyToManyField("Team", default=None)
 
 
     def __str__(self):
-        return f"Турнір: {self.name}, Місце: {self.location}, Дата: {self.date}, Кількість гравців: {self.players.all()}"
+        return f"Турнір: {self.name}, Місце: {self.location}, Дата: {self.date}, Кількість команд: {self.teams.all()}"
 
 
 class Team(models.Model):
@@ -28,7 +28,6 @@ class Player(models.Model):
     name = models.CharField(max_length=100, default=None, null=True)
     team = models.ForeignKey(Team, on_delete=models.CASCADE, default=None)
     description = models.TextField(default=None, null=True)
-    tournaments = models.ManyToManyField(Tournament, default=None)
 
     def __str__(self):
         return f"Гравець: {self.name}, Команда: {self.team.name}, Турніри: {self.tournaments.all()}"
