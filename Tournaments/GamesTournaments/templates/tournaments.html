@@ -8,6 +8,7 @@
             <th>Назва турніру</th>
             <th>Місце проведення</th>
             <th>Опис</th>
+            <th>Дата</th>
         </tr>
     </thead>
     <tbody>
@@ -18,10 +19,6 @@
                 <td>{{ tournament.location }}</td>
                 <td>{{ tournament.description }}</td>
                 <td>{{ tournament.date }}</td>
-                <td>
-                    {% for player in tournament.players.all %}
-                        {{ player.name }},
-                    {% endfor %}
                 </td>
             </tr>
         {% endfor %}

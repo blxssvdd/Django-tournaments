@@ -7,7 +7,6 @@
             <th>ID</th>
             <th>Назва команди</th>
             <th>Інформація про команду</th>
-            <th>Турніри</th>
         </tr>
     </thead>
     <tbody>
@@ -16,11 +15,6 @@
                 <td>{{ team.id }}</td>
                 <td>{{ team.name }}</td>
                 <td>{{ team.description }}</td>
-                <td>
-                    {% for tournament in team.tournament_set.all %}
-                        {{ tournament.name }},
-                    {% endfor %}
-                </td>
             </tr>
         {% endfor %}
     </tbody>

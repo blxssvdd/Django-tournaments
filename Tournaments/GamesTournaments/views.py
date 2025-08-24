@@ -42,7 +42,8 @@ def add_tournament(request):
         name = form.cleaned_data["name"]
         location = form.cleaned_data["location"]
         description = form.cleaned_data["description"]
-        tournament = Tournament(name=name, location=location, description=description)
+        date = form.cleaned_data["date"]
+        tournament = Tournament(name=name, location=location, description=description, date=date)
         tournament.save()
         return redirect("get_tournaments")
 
@@ -67,15 +68,13 @@ def add_player(request):
             name = form.cleaned_data.get("name")
             description = form.cleaned_data.get("description")
             team = form.cleaned_data.get("team")
-            tournaments = form.cleaned_data.get("tournaments")
             player = Player(
                 name=name,
                 description=description,
-                team=team,
-                tournaments=tournaments
+                team=team
             )
             player.save()
-            player.tournaments.set(tournaments)
+            player.team = team
             return redirect("get_players")
 
         return redirect("add_player")
@@ -104,7 +103,6 @@ def add_team(request):
         if form.is_valid():
             name = form.cleaned_data.get("name")
             description = form.cleaned_data.get("description")
-            players = form.cleaned_data.get("players")
             tournament = form.cleaned_data.get("tournament")
             team = Team(
                 name=name,
@@ -112,7 +110,7 @@ def add_team(request):
                 tournament=tournament
             )
             team.save()
-            team.players.set(players)
+            team.tournament = tournament
             return redirect("get_teams")
 
         return redirect("add_team")

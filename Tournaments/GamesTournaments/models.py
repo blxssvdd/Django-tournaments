@@ -6,7 +6,7 @@ class Tournament(models.Model):
     location = models.CharField(max_length=100, default=None, null=True)
     description = models.TextField(default=None, null=True)
     date = models.DateField(default=None, null=True)
-    teams = models.ManyToManyField("Team", default=None)
+    teams = models.ManyToManyField("Team", default=None, related_name='+')
 
 
     def __str__(self):

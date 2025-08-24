@@ -6,10 +6,8 @@
         <tr>
             <th>ID</th>
             <th>Гравець</th>
-            <th>Турнір</th>
             <th>Інформація про гравця</th>
-            <th>Команда</th>
-            <th>Список турнірів</th>
+            <th>Команда та турнір</th>
         </tr>
     </thead>
     <tbody>
@@ -17,13 +15,8 @@
             <tr>
                 <td>{{ player.id }}</td>
                 <td>{{ player.name }}</td>
-                <td>{{ player.team }}</td>
                 <td>{{ player.description }}</td>
-                <td>
-                    {% for tournament in player.tournaments.all %}
-                        {{ tournament }},
-                    {% endfor %}
-                </td>
+                <td>{{ player.team }}</td>
             </tr>
         {% endfor %}
     </tbody>

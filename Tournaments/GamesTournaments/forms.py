@@ -15,6 +15,10 @@ class TournamentForm(forms.Form):
         label="Опис турніру",
         widget=forms.Textarea(attrs={"class": "form-control"})
     )
+    date = forms.DateField(
+        label="Дата проведення",
+        widget=forms.DateInput(attrs={"class": "form-control", "type": "date"})
+    )
 
 
 class PlayerForm(forms.Form):
@@ -31,11 +35,6 @@ class PlayerForm(forms.Form):
         queryset=Team.objects.all(),
         widget=forms.Select(attrs={"class": "form-select"})
     )
-    tournaments = forms.ModelMultipleChoiceField(
-        queryset=Tournament.objects.all(),
-        widget=forms.SelectMultiple(attrs={"class": "form-select"}),
-        label="Виберіть турніри"
-    )
 
 
 class TeamForm(forms.Form):
@@ -47,8 +46,8 @@ class TeamForm(forms.Form):
         label="Опис команди",
         widget=forms.Textarea(attrs={"class": "form-control"})
     )
-    players = forms.ModelMultipleChoiceField(
-        queryset=Player.objects.all(),
-        widget=forms.SelectMultiple(attrs={"class": "form-select"}),
-        label="Виберіть гравців"
+    tournament = forms.ModelChoiceField(
+        label="Турнір",
+        queryset=Tournament.objects.all(),
+        widget=forms.Select(attrs={"class": "form-select"})
     )
