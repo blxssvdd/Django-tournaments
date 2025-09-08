@@ -1,0 +1,21 @@
+<div class="card text-center">
+  <div class="card-header">
+    <ul class="nav nav-pills card-header-pills">
+      <li class="nav-item">
+        <a class="nav-link active" href="{% url 'index' %}">Мій кабінет</a>
+      </li>
+      {% if request.user.is_authenticated %}
+        <li class="nav-item">
+            <a class="nav-link active" href="{% url 'logout' %}">Вихід</a>
+        </li>
+      {% else %}
+        <li class="nav-item">
+            <a class="nav-link active" href="{% url 'sign_in' %}">Вхід</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="{% url 'sign_up' %}">Реєстрація</a>
+        </li>
+      {% endif %}
+    </ul>
+  </div>
+</div>
