@@ -1,9 +1,24 @@
 {% extends "base.html" %}
 
+{% block title %}Новий турнір · Tournament Arena{% endblock %}
+
 {% block content %}
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-success">Створити турнір</button>
-</form>
+<div class="row justify-content-center">
+    <div class="col-lg-7 col-xl-6">
+        <div class="card tournament-card shadow-lg">
+            <div class="card-body p-4">
+                <h1 class="card-title text-soft text-center mb-3">Створити турнір</h1>
+                <p class="text-soft text-center mb-4">Заповніть форму, щоб додати нове змагання до арени.</p>
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <a class="btn btn-outline-light" href="{% url 'get_tournaments' %}">Назад до списку</a>
+                        <button type="submit" class="btn btn-glow">Зберегти турнір</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock content %}

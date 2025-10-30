@@ -1,27 +1,48 @@
 {% extends "base.html" %}
 
+{% block title %}Всі турніри · Tournament Arena{% endblock %}
+
 {% block content %}
-<table class="table table-striped table-hover">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Назва турніру</th>
-            <th>Місце проведення</th>
-            <th>Опис</th>
-            <th>Дата</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for tournament in tournaments %}
-            <tr>
-                <td>{{ tournament.id }}</td>
-                <td>{{ tournament.name }}</td>
-                <td>{{ tournament.location }}</td>
-                <td>{{ tournament.description }}</td>
-                <td>{{ tournament.date }}</td>
-                </td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+    <div>
+        <h1 class="mb-1">Всі турніри</h1>
+        <p class="mb-0">Повний список змагань, доступних на платформі.</p>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-outline-light" href="{% url 'get_tournaments_paginated' %}">Переглянути з пагінацією</a>
+        {% if user.is_authenticated %}
+            <a class="btn btn-glow" href="{% url 'add_tournament' %}">Новий турнір</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="row g-4">
+    {% for tournament in tournaments %}
+        <div class="col-md-6 col-xl-4">
+            <div class="card tournament-card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="badge bg-gradient">{{ tournament.location }}</span>
+                        <span class="text-soft small">{{ tournament.date|date:"d.m.Y" }}</span>
+                    </div>
+                    <h2 class="h5 fw-bold mb-2">{{ tournament.name }}</h2>
+                    <p class="flex-grow-1 description-text">{{ tournament.description|default:"Без опису" }}</p>
+                    <div class="card-foot mt-3">
+                        <span class="text-soft small">ID: {{ tournament.id }}</span>
+                        {% if user.is_authenticated %}
+                            <form method="post" action="{% url 'delete_tournament' tournament.id %}" class="ms-auto">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-light btn-sm">Видалити</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info shadow-sm">Ще немає створених турнірів. Додайте перший!</div>
+        </div>
+    {% endfor %}
+</div>
 {% endblock content %}

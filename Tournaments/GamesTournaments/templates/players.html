@@ -1,24 +1,51 @@
 {% extends "base.html" %}
 
+{% block title %}Гравці · Tournament Arena{% endblock %}
+
 {% block content %}
-<table class="table table-striped table-hover">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Гравець</th>
-            <th>Інформація про гравця</th>
-            <th>Команда та турнір</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for player in players %}
-            <tr>
-                <td>{{ player.id }}</td>
-                <td>{{ player.name }}</td>
-                <td>{{ player.description }}</td>
-                <td>{{ player.team }}</td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="page-header">
+    <div>
+        <h1 class="mb-1">Гравці арени</h1>
+        <p>Перегляньте склад учасників та їхні команди.</p>
+    </div>
+    {% if user.is_authenticated %}
+        <a class="btn btn-glow" href="{% url 'add_player' %}">Додати гравця</a>
+    {% endif %}
+</div>
+
+<div class="row g-4">
+    {% for player in players %}
+        <div class="col-md-6 col-xl-4">
+            <article class="roster-card shadow-sm">
+                <div class="card-head">
+                    <div>
+                        <h2 class="h5 fw-semibold mb-2">{{ player.name }}</h2>
+                        <span class="meta-chip">
+                            Команда: {{ player.team.name }}
+                        </span>
+                    </div>
+                    <span class="text-soft small">#{{ player.id }}</span>
+                </div>
+                <p class="description-text mb-0">
+                    {{ player.description|default:"Опис відсутній."|linebreaksbr }}
+                </p>
+                <div class="card-foot">
+                    <span>Турнір: {{ player.team.tournament.name|default:"Без турніру" }}</span>
+                    {% if user.is_authenticated %}
+                        <form method="post" action="{% url 'delete_player' player.id %}" class="ms-auto">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-light btn-sm">Видалити</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </article>
+        </div>
+    {% empty %}
+        <div class="col-12">
+            <div class="empty-state">
+                Немає жодного гравця. Додайте перших учасників, щоб розпочати змагання.
+            </div>
+        </div>
+    {% endfor %}
+</div>
 {% endblock content %}

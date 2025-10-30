@@ -1,0 +1,304 @@
+:root {
+    --arena-primary: #5568dd;
+    --arena-secondary: #3ab0d6;
+    --arena-dark: #131c2c;
+    --arena-card: rgba(22, 30, 46, 0.9);
+    --arena-border: rgba(255, 255, 255, 0.06);
+    --arena-text: #e4e9f2;
+    --arena-muted: #d4ddf3;
+    --arena-muted-strong: #f0f4ff;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.tournament-body {
+    background: linear-gradient(160deg, #0f172a 0%, #131c2c 55%, #0b1220 100%);
+    color: var(--arena-text);
+    font-family: "Inter", "Segoe UI", sans-serif;
+}
+
+.tournament-navbar {
+    background: linear-gradient(135deg, rgba(85, 104, 221, 0.85), rgba(58, 176, 214, 0.75));
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(12px);
+}
+
+.navbar.navbar-dark .navbar-toggler-icon {
+    filter: invert(1);
+}
+
+.navbar .nav-link {
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+    position: relative;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link.active {
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.btn-glow {
+    background: linear-gradient(135deg, var(--arena-primary), rgba(58, 176, 214, 0.9));
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 8px 20px rgba(85, 104, 221, 0.35);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-glow:hover {
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 14px 28px rgba(58, 176, 214, 0.3);
+}
+
+.btn-outline-light {
+    border-width: 2px;
+    border-color: rgba(255, 255, 255, 0.45);
+    color: #ffffff;
+    transition: all 0.2s ease;
+}
+
+.btn-outline-light:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+}
+
+.badge.bg-gradient {
+    background: linear-gradient(135deg, rgba(85, 104, 221, 0.75), rgba(58, 176, 214, 0.75));
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(4px);
+}
+
+.tournament-card {
+    background: var(--arena-card);
+    border: 1px solid var(--arena-border);
+    border-radius: 18px;
+    backdrop-filter: blur(10px);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.tournament-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(85, 104, 221, 0.45);
+    box-shadow: 0 18px 35px rgba(10, 14, 25, 0.45);
+}
+
+.hero-banner {
+    background: linear-gradient(140deg, rgba(17, 24, 39, 0.92), rgba(58, 176, 214, 0.35));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    padding: 3.5rem 2rem;
+    box-shadow: 0 20px 45px rgba(8, 13, 23, 0.45);
+}
+
+h1, h2, h5 {
+    color: var(--arena-text);
+}
+
+p {
+    color: var(--arena-muted-strong);
+}
+
+.messages-stack {
+    display: grid;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.message-alert {
+    border-radius: 14px;
+    border: none;
+    background-color: rgba(15, 23, 42, 0.85);
+    color: #f8fafc;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.message-alert.fade-out {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+form p {
+    margin-bottom: 1rem;
+}
+
+form p > label {
+    font-weight: 600;
+    color: rgba(226, 232, 240, 0.9);
+    margin-bottom: 0.35rem;
+}
+
+form p > input,
+form p > textarea,
+form p > select {
+    background-color: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #f8fafc;
+}
+
+form p > textarea {
+    min-height: 140px;
+}
+
+form p > input:focus,
+form p > textarea:focus,
+form p > select:focus {
+    border-color: rgba(108, 92, 231, 0.75);
+    box-shadow: 0 0 0 0.2rem rgba(108, 92, 231, 0.25);
+}
+
+/* .errorlist {
+    margin: 0 0 0.75rem;
+    padding: 0.6rem 0.85rem;
+    list-style: none;
+    border-radius: 12px;
+    background: rgba(148, 53, 53, 0.14);
+} */
+
+.errorlist li {
+    color: rgba(240, 244, 255, 0.85);
+    font-weight: 600;
+}
+
+.pagination-controls .btn {
+    min-width: 110px;
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+.pagination-controls .btn.active {
+    pointer-events: none;
+}
+
+.pagination-controls .btn.disabled {
+    opacity: 0.5;
+}
+
+.tournament-footer {
+    background: rgba(2, 6, 23, 0.6);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tournament-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.tournament-card::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    background: radial-gradient(
+        350px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(85, 104, 221, 0.22),
+        transparent 65%
+    );
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+}
+
+.tournament-card:hover::before {
+    opacity: 1;
+}
+
+.page-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.page-header p {
+    margin-bottom: 0;
+    color: var(--arena-muted);
+}
+
+.meta-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.75rem;
+    background: rgba(84, 99, 140, 0.2);
+    border-radius: 999px;
+    font-size: 0.85rem;
+    color: rgba(228, 233, 242, 0.9);
+}
+
+.description-text {
+    color: rgba(238, 242, 255, 0.88);
+    line-height: 1.6;
+}
+
+.roster-card {
+    background: var(--arena-card);
+    border: 1px solid var(--arena-border);
+    border-radius: 20px;
+    padding: 1.5rem;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.roster-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top right, rgba(58, 176, 214, 0.28), transparent 55%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.roster-card:hover::after {
+    opacity: 1;
+}
+
+.roster-card .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.tournament-card .card-foot,
+.roster-card .card-foot {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    align-items: center;
+    color: var(--arena-muted);
+    font-size: 0.9rem;
+}
+
+.empty-state {
+    padding: 2rem;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(15, 23, 42, 0.75);
+    text-align: center;
+    color: var(--arena-muted);
+}
+
+@media (max-width: 991px) {
+    .navbar .nav-link {
+        padding-left: 0;
+    }
+
+    .tournament-navbar .btn {
+        width: 100%;
+    }
+}
+.text-soft {
+    color: rgba(240, 244, 255, 0.7) !important;
+}
