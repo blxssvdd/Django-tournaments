@@ -25,14 +25,4 @@ class SignUp(UserCreationForm):
 
 class Login(AuthenticationForm):
     username = forms.CharField(label="Логін", widget=forms.TextInput(attrs={"class": "form-control"}))
-    email = forms.EmailField(label="Електронна пошта", widget=forms.EmailInput(attrs={"class": "form-control"}))
     password = forms.CharField(label="Пароль", widget=forms.PasswordInput(attrs={"class": "form-control"}))
-
-    def clean(self):
-        cleaned_data = super().clean()
-        user = self.get_user()
-        email = cleaned_data.get("email")
-
-        if user and email and user.email.lower() != email.lower():
-            raise forms.ValidationError("Електронна пошта не збігається з профілем користувача.")
-        return cleaned_data
