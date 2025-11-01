@@ -1,9 +1,24 @@
 {% extends "base.html" %}
 
+{% block title %}Вхід · Tournament Arena{% endblock %}
+
 {% block content %}
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Увійти" class="btn btn-primary">
-</form>
+<div class="row justify-content-center">
+    <div class="col-lg-6 col-xl-5">
+        <div class="card tournament-card shadow-lg">
+            <div class="card-body p-4">
+                <h1 class="card-title text-center mb-3">Вхід до акаунта</h1>
+                <p class="text-soft text-center mb-4">Уведіть свої облікові дані, щоб продовжити.</p>
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <a class="btn btn-outline-light" href="{% url 'password_reset' %}">Забули пароль?</a>
+                        <button type="submit" class="btn btn-glow">Увійти</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock content %}

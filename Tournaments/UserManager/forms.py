@@ -7,14 +7,32 @@ class SignUp(UserCreationForm):
     username = forms.CharField(max_length=20, widget=forms.TextInput(attrs={"class": "form-control"}), label="Логін", help_text="Обов'язково. До 20 символів. Латинські літери, цифри тільки.")
     first_name = forms.CharField(max_length=20, widget=forms.TextInput(attrs={"class": "form-control"}), label="Ім'я")
     last_name = forms.CharField(max_length=20, widget=forms.TextInput(attrs={"class": "form-control"}), label="Прізвище")
+    email = forms.EmailField(max_length=254, widget=forms.EmailInput(attrs={"class": "form-control"}), label="Електронна пошта")
     password1 = forms.CharField(max_length=20, widget=forms.PasswordInput(attrs={"class": "form-control"}), label="Пароль")
     password2 = forms.CharField(max_length=20, widget=forms.PasswordInput(attrs={"class": "form-control"}), label="Підтвердження пароля")
 
     class Meta:
         model = User
-        fields = ("username", "first_name", "last_name", "password1", "password2",)
+        fields = ("username", "first_name", "last_name", "email", "password1", "password2",)
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.email = self.cleaned_data["email"]
+        if commit:
+            user.save()
+        return user
 
 
 class Login(AuthenticationForm):
     username = forms.CharField(label="Логін", widget=forms.TextInput(attrs={"class": "form-control"}))
+    email = forms.EmailField(label="Електронна пошта", widget=forms.EmailInput(attrs={"class": "form-control"}))
     password = forms.CharField(label="Пароль", widget=forms.PasswordInput(attrs={"class": "form-control"}))
+
+    def clean(self):
+        cleaned_data = super().clean()
+        user = self.get_user()
+        email = cleaned_data.get("email")
+
+        if user and email and user.email.lower() != email.lower():
+            raise forms.ValidationError("Електронна пошта не збігається з профілем користувача.")
+        return cleaned_data

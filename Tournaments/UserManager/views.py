@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
@@ -28,16 +28,10 @@ def sign_in(request):
 
     form = Login(data=request.POST or None)
     if request.method == "POST" and form.is_valid():
-        user = authenticate(
-            username=form.cleaned_data.get("username"),
-            password=form.cleaned_data.get("password"),
-        )
-        if user:
-            login(request=request, user=user)
-            messages.add_message(request=request, level=messages.SUCCESS, message="Успішний вхід!")
-            return redirect("index")
-        else:
-            messages.add_message(request=request, level=messages.ERROR, message="Невірний логін або пароль.")
+        user = form.get_user()
+        login(request=request, user=user)
+        messages.add_message(request=request, level=messages.SUCCESS, message="Успішний вхід!")
+        return redirect("index")
     return render(request=request, template_name="sign_in.html", context={"form": form})
 
 
