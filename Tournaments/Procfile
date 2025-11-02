@@ -1,1 +1,1 @@
-web: gunicorn Tournaments.wsgi
+web: cd Tournaments && gunicorn Tournaments.wsgi
