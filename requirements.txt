@@ -1,2 +1,3 @@
 django
 pydantic-settings
+gunicorn
