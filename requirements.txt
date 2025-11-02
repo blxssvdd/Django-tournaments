@@ -1,0 +1,2 @@
+django
+pydantic-settings

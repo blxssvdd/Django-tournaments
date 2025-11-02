@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     password: str
     host: str
     port: str
+    secret_key: str
 
     model_config = SettingsConfigDict(env_file=".env")
 
