@@ -132,3 +132,25 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Email configuration (console backend for development)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'Tournament Arena <no-reply@arena.local>'
+
+# Logging: surface INFO-level messages (including tournament creation signal) in console
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+    'loggers': {
+        'UserManager.signals': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
