@@ -302,3 +302,55 @@ form p > select:focus {
 .text-soft {
     color: rgba(240, 244, 255, 0.7) !important;
 }
+
+.registration-inline-form .registration-qty {
+    width: 90px;
+    background: rgba(15, 23, 42, 0.8);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: #f8fafc;
+}
+
+.registration-inline-form .registration-qty:focus {
+    border-color: rgba(85, 104, 221, 0.65);
+    box-shadow: 0 0 0 0.2rem rgba(85, 104, 221, 0.25);
+}
+
+.registration-chip {
+    background: rgba(85, 104, 221, 0.2);
+    border: 1px solid rgba(85, 104, 221, 0.35);
+}
+
+.registration-card {
+    background: linear-gradient(160deg, rgba(18, 26, 44, 0.92), rgba(20, 30, 52, 0.85));
+    border: 1px solid var(--arena-border);
+    border-radius: 18px;
+    position: relative;
+    overflow: hidden;
+}
+
+.registration-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 20% 20%, rgba(58, 176, 214, 0.22), transparent 45%);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+}
+
+.registration-card:hover::before {
+    opacity: 1;
+}
+
+.registration-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+    padding: 0.35rem 0.75rem;
+    border-radius: 12px;
+    background: rgba(85, 104, 221, 0.2);
+    border: 1px solid rgba(85, 104, 221, 0.35);
+    color: #e4e9f2;
+    font-weight: 700;
+}

@@ -1,11 +1,14 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.db.models import Case, IntegerField, Sum, Value, When
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
+from django.urls import reverse
 
 from .forms import TournamentForm, TeamForm, PlayerForm
-from .models import Tournament, Team, Player
+from .models import Tournament, Team, Player, Registration
 
 # Create your views here.
 
@@ -57,19 +60,51 @@ def add_tournament(request):
 
 
 def get_tournaments(request):
-    tournaments = Tournament.objects.all().order_by("-date", "name")
-    return render(request=request, template_name="tournaments.html", context=dict(tournaments=tournaments))
+    tournaments_qs = Tournament.objects.all()
+    if request.user.is_authenticated:
+        tournaments_qs = tournaments_qs.annotate(
+            user_registration_count=Sum(
+                Case(
+                    When(registrations__user=request.user, then="registrations__count"),
+                    default=Value(0),
+                    output_field=IntegerField()
+                )
+            )
+        )
+    tournaments = tournaments_qs.order_by("-date", "name")
+    return render(
+        request=request,
+        template_name="tournaments.html",
+        context=dict(tournaments=tournaments)
+    )
 
 
 def get_tournaments_paginated(request):
-    tournaments = Tournament.objects.all().order_by("-date", "name")
+    tournaments_qs = Tournament.objects.all()
+    if request.user.is_authenticated:
+        tournaments_qs = tournaments_qs.annotate(
+            user_registration_count=Sum(
+                Case(
+                    When(registrations__user=request.user, then="registrations__count"),
+                    default=Value(0),
+                    output_field=IntegerField()
+                )
+            )
+        )
+    tournaments = tournaments_qs.order_by("-date", "name")
     paginator = Paginator(tournaments, 3)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
+    registrations_map = {}
+    if request.user.is_authenticated:
+        registrations_map = {
+            reg.tournament_id: reg.count
+            for reg in Registration.objects.filter(user=request.user)
+        }
     return render(
         request=request,
         template_name="tournaments_paginated.html",
-        context=dict(page_obj=page_obj)
+        context=dict(page_obj=page_obj, registrations_map=registrations_map)
     )
 
 
@@ -159,3 +194,67 @@ def delete_player(request, player_id):
     messages.success(request, "Гравця видалено.")
     return redirect("get_players")
 
+
+@login_required(login_url="/users/sign_in/")
+@require_POST
+def add_to_registration(request, tournament_id):
+    tournament = get_object_or_404(Tournament, pk=tournament_id)
+    try:
+        increment = int(request.POST.get("count", 1))
+    except (TypeError, ValueError):
+        increment = 1
+
+    increment = 1 if increment < 1 else increment
+
+    registration, created = Registration.objects.get_or_create(
+        user=request.user,
+        tournament=tournament,
+        defaults={"count": increment}
+    )
+    if not created:
+        registration.count += increment
+        registration.save(update_fields=["count"])
+
+    messages.success(request, f"Додано {increment} слот(и) для {tournament.name}.")
+    redirect_url = request.POST.get("next") or request.META.get("HTTP_REFERER")
+    if not redirect_url or not url_has_allowed_host_and_scheme(redirect_url, allowed_hosts={request.get_host()}):
+        redirect_url = reverse("my_registrations")
+    return redirect(redirect_url)
+
+
+@login_required(login_url="/users/sign_in/")
+def my_registrations(request):
+    registrations = Registration.objects.select_related("tournament").filter(
+        user=request.user
+    ).order_by("-tournament__date", "tournament__name")
+    total_count = sum(reg.count for reg in registrations)
+    return render(
+        request=request,
+        template_name="my_registrations.html",
+        context=dict(registrations=registrations, total_count=total_count)
+    )
+
+
+@login_required(login_url="/users/sign_in/")
+@require_POST
+def remove_registration(request, tournament_id):
+    registration = get_object_or_404(Registration, user=request.user, tournament_id=tournament_id)
+    try:
+        decrement = int(request.POST.get("count", registration.count))
+    except (TypeError, ValueError):
+        decrement = registration.count
+
+    decrement = 1 if decrement < 1 else decrement
+
+    if decrement >= registration.count:
+        registration.delete()
+        messages.success(request, f"Реєстрацію для {registration.tournament.name} видалено.")
+    else:
+        registration.count -= decrement
+        registration.save(update_fields=["count"])
+        messages.success(request, f"Зменшено слотів для {registration.tournament.name} на {decrement} (залишилось {registration.count}).")
+
+    redirect_url = request.POST.get("next") or request.META.get("HTTP_REFERER")
+    if not redirect_url or not url_has_allowed_host_and_scheme(redirect_url, allowed_hosts={request.get_host()}):
+        redirect_url = reverse("my_registrations")
+    return redirect(redirect_url)

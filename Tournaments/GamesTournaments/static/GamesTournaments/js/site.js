@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }, delay);
     });
 
-    const cards = document.querySelectorAll(".tournament-card");
+    const cards = document.querySelectorAll(".tournament-card, .registration-card");
     cards.forEach((card) => {
         card.addEventListener("mousemove", (event) => {
             const rect = card.getBoundingClientRect();

@@ -31,6 +31,11 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'get_teams' %}" data-nav-match="/teams/">Команди</a>
                     </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'my_registrations' %}" data-nav-match="/registrations/">Мої реєстрації</a>
+                        </li>
+                    {% endif %}
                 </ul>
                 <div class="d-flex align-items-center gap-2">
                     {% if user.is_authenticated %}

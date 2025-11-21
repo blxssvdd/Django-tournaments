@@ -27,13 +27,28 @@
                     </div>
                     <h2 class="h5 fw-bold mb-2">{{ tournament.name }}</h2>
                     <p class="flex-grow-1 description-text">{{ tournament.description|default:"Без опису" }}</p>
-                    <div class="card-foot mt-3">
-                        <span class="text-soft small">ID: {{ tournament.id }}</span>
+                    <div class="card-foot mt-3 flex-column gap-2">
+                        <div class="d-flex flex-wrap align-items-center gap-2">
+                            <span class="text-soft small">ID: {{ tournament.id }}</span>
+                            {% if user.is_authenticated and tournament.user_registration_count %}
+                                <span class="meta-chip registration-chip">У вас: ×{{ tournament.user_registration_count }}</span>
+                            {% endif %}
+                        </div>
                         {% if user.is_authenticated %}
+                        <div class="d-flex flex-wrap align-items-center gap-2">
+                            <form method="post" action="{% url 'add_to_registration' tournament.id %}" class="registration-inline-form">
+                                {% csrf_token %}
+                                <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                                <div class="input-group input-group-sm">
+                                    <input type="number" name="count" min="1" value="1" class="form-control form-control-sm registration-qty">
+                                    <button type="submit" class="btn btn-glow btn-sm">Додати</button>
+                                </div>
+                            </form>
                             <form method="post" action="{% url 'delete_tournament' tournament.id %}" class="ms-auto">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-outline-light btn-sm">Видалити</button>
                             </form>
+                        </div>
                         {% endif %}
                     </div>
                 </div>

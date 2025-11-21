@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Мої реєстрації · Tournament Arena{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="mb-1">Мої реєстрації</h1>
+        <p class="mb-0">Турніри, які ви додали до кошика, з кількістю заброньованих слотів.</p>
+    </div>
+    <div class="d-flex flex-wrap align-items-center gap-2">
+        <span class="meta-chip">Загалом слотів: {{ total_count|default:0 }}</span>
+        <a class="btn btn-outline-light" href="{% url 'get_tournaments' %}">До всіх турнірів</a>
+    </div>
+</div>
+
+{% if registrations %}
+    <div class="row g-4">
+        {% for registration in registrations %}
+            <div class="col-md-6 col-xl-4">
+                <div class="card registration-card h-100 shadow-sm">
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                            <div>
+                                <h2 class="h5 fw-bold mb-1">{{ registration.tournament.name }}</h2>
+                                <p class="text-soft small mb-0">
+                                    {{ registration.tournament.location|default:"Невідоме місце" }} •
+                                    {{ registration.tournament.date|date:"d.m.Y" }}
+                                </p>
+                            </div>
+                            <span class="registration-count">×{{ registration.count }}</span>
+                        </div>
+                        <p class="flex-grow-1 description-text">{{ registration.tournament.description|default:"Без опису" }}</p>
+                        <div class="card-foot mt-3 flex-wrap justify-content-between align-items-center">
+                            <div class="d-flex flex-column gap-1">
+                                <span class="text-soft small">ID турніру: {{ registration.tournament.id }}</span>
+                                <span class="text-soft small">Дата: {{ registration.tournament.date|date:"M Y" }}</span>
+                            </div>
+                            <form method="post" action="{% url 'remove_registration' registration.tournament.id %}" class="registration-inline-form">
+                                {% csrf_token %}
+                                <div class="input-group input-group-sm">
+                                    <input type="number" name="count" min="1" max="{{ registration.count }}" value="1" class="form-control form-control-sm registration-qty">
+                                    <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                                    <button type="submit" class="btn btn-outline-light btn-sm">Вилучити</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state shadow-sm">
+        <h2 class="h5 mb-2">Ще нічого не додано</h2>
+        <p class="mb-3">Обирайте турніри та додавайте їх у свою корзину реєстрацій.</p>
+        <a class="btn btn-glow" href="{% url 'get_tournaments' %}">Перейти до турнірів</a>
+    </div>
+{% endif %}
+{% endblock content %}
