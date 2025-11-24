@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.cache import cache
 from django.core.paginator import Paginator
 from django.db.models import Case, IntegerField, Sum, Value, When
 from django.shortcuts import render, redirect, get_object_or_404
@@ -60,18 +61,23 @@ def add_tournament(request):
 
 
 def get_tournaments(request):
-    tournaments_qs = Tournament.objects.all()
-    if request.user.is_authenticated:
-        tournaments_qs = tournaments_qs.annotate(
-            user_registration_count=Sum(
-                Case(
-                    When(registrations__user=request.user, then="registrations__count"),
-                    default=Value(0),
-                    output_field=IntegerField()
+    cache_key = f"tournaments_{request.user.id}" if request.user.is_authenticated else "tournaments_anon"
+    tournaments = cache.get(cache_key)
+
+    if not tournaments:
+        tournaments_qs = Tournament.objects.all()
+        if request.user.is_authenticated:
+            tournaments_qs = tournaments_qs.annotate(
+                user_registration_count=Sum(
+                    Case(
+                        When(registrations__user=request.user, then="registrations__count"),
+                        default=Value(0),
+                        output_field=IntegerField()
+                    )
                 )
             )
-        )
-    tournaments = tournaments_qs.order_by("-date", "name")
+        tournaments = list(tournaments_qs.order_by("-date", "name"))
+        cache.set(cache_key, tournaments, 30)
     return render(
         request=request,
         template_name="tournaments.html",
