@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django import forms
+from captcha.fields import CaptchaField
 
 
 class SignUp(UserCreationForm):
@@ -10,7 +11,7 @@ class SignUp(UserCreationForm):
     email = forms.EmailField(max_length=254, widget=forms.EmailInput(attrs={"class": "form-control"}), label="Електронна пошта")
     password1 = forms.CharField(max_length=20, widget=forms.PasswordInput(attrs={"class": "form-control"}), label="Пароль")
     password2 = forms.CharField(max_length=20, widget=forms.PasswordInput(attrs={"class": "form-control"}), label="Підтвердження пароля")
-
+    captcha = CaptchaField(label="Введіть символи", error_messages={"invalid": "Невірні символи"})
     class Meta:
         model = User
         fields = ("username", "first_name", "last_name", "email", "password1", "password2",)
@@ -26,3 +27,4 @@ class SignUp(UserCreationForm):
 class Login(AuthenticationForm):
     username = forms.CharField(label="Логін", widget=forms.TextInput(attrs={"class": "form-control"}))
     password = forms.CharField(label="Пароль", widget=forms.PasswordInput(attrs={"class": "form-control"}))
+    captcha = CaptchaField(label="Введіть символи", error_messages={"invalid": "Невірні символи"})
