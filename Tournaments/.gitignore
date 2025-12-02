@@ -15,8 +15,6 @@ __pycache__/
 db.sqlite3
 *.log
 media/
-static/
-staticfiles/
 
 # Tooling
 .idea/
