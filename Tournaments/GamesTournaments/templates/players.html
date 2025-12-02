@@ -8,7 +8,7 @@
         <h1 class="mb-1">Гравці арени</h1>
         <p>Перегляньте склад учасників та їхні команди.</p>
     </div>
-    {% if user.is_authenticated %}
+    {% if perms.GamesTournaments.manage_roster %}
         <a class="btn btn-glow" href="{% url 'add_player' %}">Додати гравця</a>
     {% endif %}
 </div>
@@ -32,10 +32,14 @@
                 <div class="card-foot">
                     <span>Турнір: {{ player.team.tournament.name|default:"Без турніру" }}</span>
                     {% if user.is_authenticated %}
-                        <form method="post" action="{% url 'delete_player' player.id %}" class="ms-auto">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-outline-light btn-sm">Видалити</button>
-                        </form>
+                        {% if perms.GamesTournaments.manage_roster or player.user_id == user.id %}
+                            <form method="post" action="{% url 'delete_player' player.id %}" class="ms-auto">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-light btn-sm">
+                                    {% if player.user_id == user.id %}Покинути{% else %}Видалити{% endif %}
+                                </button>
+                            </form>
+                        {% endif %}
                     {% endif %}
                 </div>
             </article>

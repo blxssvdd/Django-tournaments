@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+{% load socialaccount %}
+
+
 
 {% block title %}Вхід · Tournament Arena{% endblock %}
 
@@ -17,6 +20,17 @@
                         <button type="submit" class="btn btn-glow">Увійти</button>
                     </div>
                 </form>
+                <div class="text-center mt-4">
+                    <div class="text-soft mb-2">Або увійдіть за допомогою</div>
+                    <a class="btn btn-google w-100" href="{% provider_login_url 'google' %}">
+                        <span class="google-icon" aria-hidden="true">
+                            <svg viewBox="0 0 488 512" focusable="false">
+                                <path fill="#EA4335" d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 122.6 24.5 165.1 64.8l-67 64.1C318.6 99.5 286.2 88 248 88c-87 0-158 71-158 168s71 168 158 168c100.8 0 138.5-72.4 144.3-110.3H248v-88.4h236C486.6 239.3 488 250.1 488 261.8z"/>
+                            </svg>
+                        </span>
+                        <span class="google-text">Google</span>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

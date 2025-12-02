@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     const currentPath = window.location.pathname;
+    const THEME_KEY = "arena-theme";
 
     document.querySelectorAll("[data-nav-match]").forEach((link) => {
         const pattern = link.dataset.navMatch;
@@ -7,6 +8,28 @@ document.addEventListener("DOMContentLoaded", () => {
             link.classList.add("active");
         }
     });
+
+    const applyTheme = (theme) => {
+        const root = document.documentElement;
+        root.setAttribute("data-theme", theme);
+        const toggleIcon = document.querySelector(".theme-toggle__icon");
+        if (toggleIcon) {
+            toggleIcon.textContent = theme === "light" ? "☀️" : "🌙";
+        }
+    };
+
+    const savedTheme = localStorage.getItem(THEME_KEY) || "dark";
+    applyTheme(savedTheme);
+
+    const toggleButton = document.getElementById("themeToggle");
+    if (toggleButton) {
+        toggleButton.addEventListener("click", () => {
+            const current = document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
+            const next = current === "light" ? "dark" : "light";
+            localStorage.setItem(THEME_KEY, next);
+            applyTheme(next);
+        });
+    }
 
     const alerts = document.querySelectorAll(".message-alert");
     alerts.forEach((alert, index) => {

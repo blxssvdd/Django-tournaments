@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 from config import settings
@@ -27,7 +28,17 @@ SECRET_KEY = settings.secret_key
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+LOGIN_URL = "/accounts/login"
+SITE_ID = 1
+
+LOGIN_REDIRECT_URL = '/' # Перенаправляти на головну сторінку
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
+ACCOUNT_SESSION_REMEMBER = True
+ACCOUNT_LOGOUT_ON_GET = True
+ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 
 # Application definition
@@ -35,6 +46,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'GamesTournaments',
     "UserManager",
+    "django.contrib.sites",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,6 +54,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'captcha',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 ]
 
 MIDDLEWARE = [
@@ -50,6 +66,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -132,6 +149,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -141,6 +160,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Email configuration (console backend for development)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'Tournament Arena <no-reply@arena.local>'
+
+
+
+
+
+
 
 # Logging: surface INFO-level messages (including tournament creation signal) in console
 LOGGING = {
@@ -163,3 +188,34 @@ LOGGING = {
         },
     },
 }
+
+AUTHENTICATION_BACKENDS = [
+    # Обов'язковий для Django Admin
+    'django.contrib.auth.backends.ModelBackend',
+
+    # allauth (для входу з логіном/email)
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+# Соціальні провайдери (Google). APP береться з env або з SocialApp у адмінці.
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "SCOPE": ["profile", "email"],
+        "AUTH_PARAMS": {"access_type": "offline"},
+    }
+}
+
+# Перехід одразу на Google без проміжного екрану
+SOCIALACCOUNT_LOGIN_ON_GET = True
+
+# Адаптер: м'яке вибирання SocialApp + завантаження аватара з Google
+SOCIALACCOUNT_ADAPTER = "UserManager.adapters.LenientSocialAccountAdapter"
+
+# Social login: конфіг для Google і моментальний перехід без проміжного екрану
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "SCOPE": ["profile", "email"],
+        "AUTH_PARAMS": {"access_type": "offline"},
+    }
+}
+SOCIALACCOUNT_LOGIN_ON_GET = True

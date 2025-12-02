@@ -10,7 +10,7 @@
     </div>
     <div class="d-flex flex-wrap gap-2">
         <a class="btn btn-outline-light" href="{% url 'get_tournaments_paginated' %}">Переглянути з пагінацією</a>
-        {% if user.is_authenticated %}
+        {% if perms.GamesTournaments.manage_tournaments %}
             <a class="btn btn-glow" href="{% url 'add_tournament' %}">Новий турнір</a>
         {% endif %}
     </div>
@@ -20,6 +20,13 @@
     {% for tournament in tournaments %}
         <div class="col-md-6 col-xl-4">
             <div class="card tournament-card h-100 shadow-sm">
+                <div class="card-media">
+                    {% if tournament.banner %}
+                        <img src="{{ tournament.banner.url }}" alt="Обкладинка {{ tournament.name }}">
+                    {% else %}
+                        <div class="card-media__fallback">{{ tournament.name|first|default:"T" }}</div>
+                    {% endif %}
+                </div>
                 <div class="card-body d-flex flex-column">
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <span class="badge bg-gradient">{{ tournament.location }}</span>
@@ -30,10 +37,29 @@
                     <div class="card-foot mt-3 flex-column gap-2">
                         <div class="d-flex flex-wrap align-items-center gap-2">
                             <span class="text-soft small">ID: {{ tournament.id }}</span>
+                            <span class="meta-chip">
+                                Команд: {{ tournament.team_count|default:0 }}
+                            </span>
                             {% if user.is_authenticated and tournament.user_registration_count %}
                                 <span class="meta-chip registration-chip">У вас: ×{{ tournament.user_registration_count }}</span>
                             {% endif %}
                         </div>
+                        {% if tournament.team_set.all %}
+                            <div class="team-preview">
+                                <span class="text-soft small d-block mb-1">Склад турніру:</span>
+                                <div class="d-flex flex-wrap gap-2">
+                                    {% for team in tournament.team_set.all|slice:":3" %}
+                                        <span class="meta-chip">
+                                            {{ team.name }}
+                                            {% if team.player_count %}<span class="text-soft">· {{ team.player_count }} гравців</span>{% endif %}
+                                        </span>
+                                    {% endfor %}
+                                    {% if tournament.team_count|default:0 > 3 %}
+                                        <span class="meta-chip">+ ще {{ tournament.team_count|add:"-3" }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
                         {% if user.is_authenticated %}
                         <div class="d-flex flex-wrap align-items-center gap-2">
                             <form method="post" action="{% url 'add_to_registration' tournament.id %}" class="registration-inline-form">
@@ -44,10 +70,15 @@
                                     <button type="submit" class="btn btn-glow btn-sm">Додати</button>
                                 </div>
                             </form>
-                            <form method="post" action="{% url 'delete_tournament' tournament.id %}" class="ms-auto">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-outline-light btn-sm">Видалити</button>
-                            </form>
+                            {% if perms.GamesTournaments.manage_tournaments %}
+                                <a class="btn btn-outline-light btn-sm" href="{% url 'edit_tournament' tournament.id %}">Редагувати</a>
+                            {% endif %}
+                            {% if perms.GamesTournaments.manage_tournaments %}
+                                <form method="post" action="{% url 'delete_tournament' tournament.id %}" class="ms-auto">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-outline-light btn-sm">Видалити</button>
+                                </form>
+                            {% endif %}
                         </div>
                         {% endif %}
                     </div>

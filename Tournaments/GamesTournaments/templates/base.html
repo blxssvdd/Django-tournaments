@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="uk" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,10 +38,24 @@
                     {% endif %}
                 </ul>
                 <div class="d-flex align-items-center gap-2">
+                    <button class="btn btn-outline-light theme-toggle" type="button" id="themeToggle" aria-label="Змінити тему" title="Змінити тему">
+                        <span class="theme-toggle__icon">🌙</span>
+                    </button>
                     {% if user.is_authenticated %}
-                        <span class="text-light small">Вітаємо, {{ user.username }}!</span>
-                        <a class="btn btn-glow" href="{% url 'add_tournament' %}">Новий турнір</a>
+                        {% if perms.GamesTournaments.manage_tournaments %}
+                            <a class="btn btn-glow" href="{% url 'add_tournament' %}">Новий турнір</a>
+                        {% endif %}
                         <a class="btn btn-outline-light" href="{% url 'logout' %}">Вийти</a>
+                        <a class="profile-chip text-decoration-none" href="{% url 'profile' %}">
+                            <span class="avatar avatar-sm">
+                                {% if user.profile.avatar %}
+                                    <img src="{{ user.profile.avatar.url }}" alt="Аватар {{ user.username }}">
+                                {% else %}
+                                    {{ user.username|first|upper }}
+                                {% endif %}
+                            </span>
+                            <span class="text-light small">{{ user.username }}</span>
+                        </a>
                     {% else %}
                         <a class="btn btn-outline-light" href="{% url 'sign_in' %}">Увійти</a>
                         <a class="btn btn-glow" href="{% url 'sign_up' %}">Зареєструватися</a>

@@ -8,7 +8,7 @@
         <h1 class="mb-1">Команди</h1>
         <p>Командні склади та короткий опис кожного колективу.</p>
     </div>
-    {% if user.is_authenticated %}
+    {% if perms.GamesTournaments.manage_teams %}
         <a class="btn btn-glow" href="{% url 'add_team' %}">Створити команду</a>
     {% endif %}
 </div>
@@ -17,6 +17,13 @@
     {% for team in teams %}
         <div class="col-md-6 col-xl-4">
             <article class="roster-card shadow-sm">
+                <div class="card-media small">
+                    {% if team.emblem %}
+                        <img src="{{ team.emblem.url }}" alt="Лого {{ team.name }}">
+                    {% else %}
+                        <div class="card-media__fallback">{{ team.name|first|default:"T" }}</div>
+                    {% endif %}
+                </div>
                 <div class="card-head">
                     <div>
                         <h2 class="h5 fw-semibold mb-2">{{ team.name }}</h2>
@@ -29,14 +36,25 @@
                 <p class="description-text mb-0">
                     {{ team.description|default:"Команда ще не залишила опис."|linebreaksbr }}
                 </p>
-                {% if user.is_authenticated %}
-                    <div class="card-foot">
-                        <form method="post" action="{% url 'delete_team' team.id %}" class="ms-auto">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-outline-light btn-sm">Видалити</button>
-                        </form>
-                    </div>
-                {% endif %}
+                <div class="card-foot">
+                    {% if user.is_authenticated %}
+                        {% if team.id in memberships %}
+                            <form method="post" action="{% url 'leave_team' team.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-light btn-sm">Покинути команду</button>
+                            </form>
+                        {% else %}
+                            <a class="btn btn-glow btn-sm" href="{% url 'join_team' team.id %}">Приєднатись</a>
+                        {% endif %}
+                        {% if perms.GamesTournaments.manage_teams %}
+                            <a class="btn btn-outline-light btn-sm" href="{% url 'edit_team' team.id %}">Редагувати</a>
+                            <form method="post" action="{% url 'delete_team' team.id %}" class="ms-auto">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-light btn-sm">Видалити</button>
+                            </form>
+                        {% endif %}
+                    {% endif %}
+                </div>
             </article>
         </div>
     {% empty %}

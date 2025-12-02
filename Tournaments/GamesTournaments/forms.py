@@ -19,6 +19,11 @@ class TournamentForm(forms.Form):
         label="Дата проведення",
         widget=forms.DateInput(attrs={"class": "form-control", "type": "date"})
     )
+    banner = forms.ImageField(
+        label="Обкладинка (необов'язково)",
+        required=False,
+        widget=forms.ClearableFileInput(attrs={"class": "form-control"})
+    )
 
 
 class PlayerForm(forms.Form):
@@ -50,4 +55,22 @@ class TeamForm(forms.Form):
         label="Турнір",
         queryset=Tournament.objects.all(),
         widget=forms.Select(attrs={"class": "form-select"})
+    )
+    emblem = forms.ImageField(
+        label="Лого команди (необов'язково)",
+        required=False,
+        widget=forms.ClearableFileInput(attrs={"class": "form-control"})
+    )
+
+
+class JoinTeamForm(forms.Form):
+    team = forms.ModelChoiceField(
+        label="Команда",
+        queryset=Team.objects.select_related("tournament").all(),
+        widget=forms.Select(attrs={"class": "form-select"}),
+    )
+    note = forms.CharField(
+        label="Коротко про себе (необов'язково)",
+        required=False,
+        widget=forms.Textarea(attrs={"class": "form-control", "rows": 3}),
     )

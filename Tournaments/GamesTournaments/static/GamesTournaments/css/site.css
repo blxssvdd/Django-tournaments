@@ -1,12 +1,31 @@
 :root {
-    --arena-primary: #5568dd;
-    --arena-secondary: #3ab0d6;
-    --arena-dark: #131c2c;
-    --arena-card: rgba(22, 30, 46, 0.9);
-    --arena-border: rgba(255, 255, 255, 0.06);
-    --arena-text: #e4e9f2;
-    --arena-muted: #d4ddf3;
-    --arena-muted-strong: #f0f4ff;
+    --arena-primary: #7b8cff;
+    --arena-secondary: #4ac3ff;
+    --arena-bg: linear-gradient(170deg, #050505 0%, #0b0b0b 35%, #0f1114 100%);
+    --arena-card: #0f1114;
+    --arena-surface: #0b0d10;
+    --arena-border: rgba(255, 255, 255, 0.08);
+    --arena-text: #f5f7fb;
+    --arena-soft: rgba(230, 235, 245, 0.8);
+    --arena-muted: #cfd5e6;
+    --arena-muted-strong: #e6e9f2;
+    --arena-chip: rgba(255, 255, 255, 0.08);
+    --arena-chip-border: rgba(255, 255, 255, 0.14);
+}
+
+html[data-theme="light"] {
+    --arena-primary: #3b5bfd;
+    --arena-secondary: #1e96d2;
+    --arena-bg: linear-gradient(145deg, #f5f7fb 0%, #e6ecf7 45%, #f8fbff 100%);
+    --arena-card: #ffffff;
+    --arena-surface: #f7f9fd;
+    --arena-border: rgba(19, 29, 53, 0.08);
+    --arena-text: #101828;
+    --arena-soft: rgba(37, 49, 73, 0.76);
+    --arena-muted: #3e4c6d;
+    --arena-muted-strong: #23304d;
+    --arena-chip: rgba(59, 91, 253, 0.12);
+    --arena-chip-border: rgba(59, 91, 253, 0.26);
 }
 
 * {
@@ -14,14 +33,15 @@
 }
 
 .tournament-body {
-    background: linear-gradient(160deg, #0f172a 0%, #131c2c 55%, #0b1220 100%);
+    background: var(--arena-bg);
     color: var(--arena-text);
     font-family: "Inter", "Segoe UI", sans-serif;
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
 .tournament-navbar {
-    background: linear-gradient(135deg, rgba(85, 104, 221, 0.85), rgba(58, 176, 214, 0.75));
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    background: linear-gradient(135deg, rgba(10, 10, 10, 0.95), rgba(16, 18, 23, 0.92));
+    border-bottom: 1px solid var(--arena-border);
     backdrop-filter: blur(12px);
 }
 
@@ -30,7 +50,8 @@
 }
 
 .navbar .nav-link {
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--arena-text);
+    opacity: 0.88;
     font-weight: 500;
     position: relative;
     transition: color 0.2s ease, transform 0.2s ease;
@@ -38,8 +59,19 @@
 
 .navbar .nav-link:hover,
 .navbar .nav-link.active {
-    color: #ffffff;
+    color: var(--arena-text);
     transform: translateY(-2px);
+}
+
+.navbar .navbar-brand {
+    color: var(--arena-text);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.navbar .navbar-brand:hover {
+    color: var(--arena-primary);
 }
 
 .btn-glow {
@@ -53,24 +85,24 @@
 .btn-glow:hover {
     color: #ffffff;
     transform: translateY(-2px);
-    box-shadow: 0 14px 28px rgba(58, 176, 214, 0.3);
+    box-shadow: 0 14px 28px rgba(255, 255, 255, 0.22);
 }
 
 .btn-outline-light {
     border-width: 2px;
-    border-color: rgba(255, 255, 255, 0.45);
-    color: #ffffff;
+    border-color: var(--arena-border);
+    color: var(--arena-text);
     transition: all 0.2s ease;
 }
 
 .btn-outline-light:hover {
     background-color: rgba(255, 255, 255, 0.12);
-    color: #ffffff;
+    color: var(--arena-text);
 }
 
 .badge.bg-gradient {
     background: linear-gradient(135deg, rgba(85, 104, 221, 0.75), rgba(58, 176, 214, 0.75));
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    border: 1px solid var(--arena-border);
     backdrop-filter: blur(4px);
 }
 
@@ -84,16 +116,16 @@
 
 .tournament-card:hover {
     transform: translateY(-6px);
-    border-color: rgba(85, 104, 221, 0.45);
-    box-shadow: 0 18px 35px rgba(10, 14, 25, 0.45);
+    border-color: rgba(255, 255, 255, 0.16);
+    box-shadow: 0 18px 35px rgba(0, 0, 0, 0.55);
 }
 
 .hero-banner {
-    background: linear-gradient(140deg, rgba(17, 24, 39, 0.92), rgba(58, 176, 214, 0.35));
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: linear-gradient(140deg, rgba(12, 13, 16, 0.96), rgba(22, 24, 28, 0.94));
+    border: 1px solid var(--arena-border);
     border-radius: 24px;
     padding: 3.5rem 2rem;
-    box-shadow: 0 20px 45px rgba(8, 13, 23, 0.45);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
 }
 
 h1, h2, h5 {
@@ -101,7 +133,22 @@ h1, h2, h5 {
 }
 
 p {
+    color: var(--arena-soft);
+}
+
+.tournament-card,
+.roster-card,
+.registration-card {
+    color: var(--arena-text);
+}
+
+dl dt {
     color: var(--arena-muted-strong);
+    font-weight: 700;
+}
+
+dl dd {
+    color: var(--arena-text);
 }
 
 .messages-stack {
@@ -113,8 +160,8 @@ p {
 .message-alert {
     border-radius: 14px;
     border: none;
-    background-color: rgba(15, 23, 42, 0.85);
-    color: #f8fafc;
+    background-color: #0e1014;
+    color: var(--arena-text);
     transition: opacity 0.35s ease, transform 0.35s ease;
 }
 
@@ -136,9 +183,9 @@ form p > label {
 form p > input,
 form p > textarea,
 form p > select {
-    background-color: rgba(15, 23, 42, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: #f8fafc;
+    background-color: var(--arena-surface);
+    border: 1px solid var(--arena-border);
+    color: var(--arena-text);
 }
 
 form p > textarea {
@@ -149,7 +196,7 @@ form p > input:focus,
 form p > textarea:focus,
 form p > select:focus {
     border-color: rgba(108, 92, 231, 0.75);
-    box-shadow: 0 0 0 0.2rem rgba(108, 92, 231, 0.25);
+    box-shadow: 0 0 0 0.2rem rgba(108, 92, 231, 0.2);
 }
 
 /* .errorlist {
@@ -180,8 +227,9 @@ form p > select:focus {
 }
 
 .tournament-footer {
-    background: rgba(2, 6, 23, 0.6);
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    background: #0b0c0f;
+    border-top: 1px solid var(--arena-border);
+    color: var(--arena-text);
 }
 
 .tournament-card {
@@ -195,7 +243,7 @@ form p > select:focus {
     inset: -1px;
     background: radial-gradient(
         350px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-        rgba(85, 104, 221, 0.22),
+        rgba(140, 140, 140, 0.18),
         transparent 65%
     );
     opacity: 0;
@@ -226,14 +274,15 @@ form p > select:focus {
     align-items: center;
     gap: 0.5rem;
     padding: 0.35rem 0.75rem;
-    background: rgba(84, 99, 140, 0.2);
+    background: var(--arena-chip);
+    border: 1px solid var(--arena-chip-border);
     border-radius: 999px;
     font-size: 0.85rem;
-    color: rgba(228, 233, 242, 0.9);
+    color: var(--arena-text);
 }
 
 .description-text {
-    color: rgba(238, 242, 255, 0.88);
+    color: var(--arena-soft);
     line-height: 1.6;
 }
 
@@ -254,7 +303,7 @@ form p > select:focus {
     content: "";
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at top right, rgba(58, 176, 214, 0.28), transparent 55%);
+    background: radial-gradient(circle at top right, rgba(120, 120, 120, 0.24), transparent 55%);
     opacity: 0;
     transition: opacity 0.3s ease;
     pointer-events: none;
@@ -284,10 +333,10 @@ form p > select:focus {
 .empty-state {
     padding: 2rem;
     border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid var(--arena-border);
+    background: var(--arena-card);
     text-align: center;
-    color: var(--arena-muted);
+    color: var(--arena-text);
 }
 
 @media (max-width: 991px) {
@@ -300,14 +349,23 @@ form p > select:focus {
     }
 }
 .text-soft {
-    color: rgba(240, 244, 255, 0.7) !important;
+    color: var(--arena-soft) !important;
+}
+
+.text-light {
+    color: var(--arena-text) !important;
+}
+
+.small,
+small {
+    color: var(--arena-soft);
 }
 
 .registration-inline-form .registration-qty {
     width: 90px;
-    background: rgba(15, 23, 42, 0.8);
-    border-color: rgba(255, 255, 255, 0.15);
-    color: #f8fafc;
+    background: var(--arena-surface);
+    border-color: var(--arena-border);
+    color: var(--arena-text);
 }
 
 .registration-inline-form .registration-qty:focus {
@@ -321,7 +379,7 @@ form p > select:focus {
 }
 
 .registration-card {
-    background: linear-gradient(160deg, rgba(18, 26, 44, 0.92), rgba(20, 30, 52, 0.85));
+    background: linear-gradient(160deg, #0f1114, #0b0d10);
     border: 1px solid var(--arena-border);
     border-radius: 18px;
     position: relative;
@@ -332,7 +390,7 @@ form p > select:focus {
     content: "";
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at 20% 20%, rgba(58, 176, 214, 0.22), transparent 45%);
+    background: radial-gradient(circle at 20% 20%, rgba(120, 120, 120, 0.18), transparent 45%);
     opacity: 0;
     transition: opacity 0.2s ease;
     pointer-events: none;
@@ -353,4 +411,281 @@ form p > select:focus {
     border: 1px solid rgba(85, 104, 221, 0.35);
     color: #e4e9f2;
     font-weight: 700;
+}
+
+.profile-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.profile-chip:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+}
+
+.avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    color: #f8fafc;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.avatar-sm {
+    width: 36px;
+    height: 36px;
+    font-size: 0.9rem;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-avatar img {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+}
+
+.avatar-fallback {
+    width: 140px;
+    height: 140px;
+    background: linear-gradient(135deg, rgba(85, 104, 221, 0.45), rgba(58, 176, 214, 0.45));
+    color: #0f172a;
+    font-size: 2.5rem;
+    font-weight: 800;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.2);
+}
+
+.profile-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.team-preview .meta-chip {
+    background: rgba(85, 104, 221, 0.18);
+    border: 1px solid rgba(85, 104, 221, 0.28);
+}
+
+.theme-toggle {
+    border-color: var(--arena-border);
+    color: var(--arena-text);
+    background: transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.theme-toggle:hover {
+    background: var(--arena-card);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.theme-toggle__icon {
+    display: inline-block;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.btn-google {
+    background: linear-gradient(135deg, #ffffff, rgba(255, 255, 255, 0.92));
+    border: 1px solid rgba(16, 24, 40, 0.12);
+    color: #111827;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    padding: 0.75rem 1rem;
+    border-radius: 14px;
+    font-weight: 700;
+    box-shadow: 0 10px 25px rgba(16, 24, 40, 0.12);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    text-decoration: none;
+}
+
+.btn-google:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px rgba(16, 24, 40, 0.16);
+    border-color: rgba(16, 24, 40, 0.18);
+}
+
+.btn-google:active {
+    transform: translateY(0);
+}
+
+.google-icon svg {
+    width: 22px;
+    height: 22px;
+    display: block;
+}
+
+.google-text {
+    color: inherit;
+}
+
+.allauth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--arena-bg);
+    padding: 2rem 1rem;
+}
+
+.allauth-card {
+    max-width: 540px;
+    width: 100%;
+    background: var(--arena-card);
+    border: 1px solid var(--arena-border);
+    border-radius: 18px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+    padding: 2rem;
+}
+
+.allauth-card h1 {
+    margin-bottom: 1rem;
+}
+
+.allauth-card p {
+    color: var(--arena-soft);
+    margin-bottom: 1.5rem;
+}
+
+/* Light theme overrides */
+html[data-theme="light"] .tournament-navbar {
+    background: linear-gradient(135deg, rgba(245, 248, 255, 0.98), rgba(228, 236, 255, 0.95));
+    border-bottom: 1px solid #d6deeb;
+    box-shadow: 0 10px 24px rgba(16, 24, 40, 0.06);
+}
+
+html[data-theme="light"] .navbar .nav-link {
+    color: var(--arena-text);
+    opacity: 0.9;
+}
+
+html[data-theme="light"] .navbar .nav-link:hover,
+html[data-theme="light"] .navbar .nav-link.active {
+    color: var(--arena-primary);
+}
+
+html[data-theme="light"] .navbar .navbar-brand {
+    color: #1f2937;
+    font-weight: 800;
+    text-shadow: none;
+}
+
+html[data-theme="light"] .hero-banner {
+    background: linear-gradient(140deg, rgba(255, 255, 255, 0.96), rgba(59, 91, 253, 0.12));
+    box-shadow: 0 12px 30px rgba(16, 24, 40, 0.08);
+}
+
+html[data-theme="light"] .tournament-card,
+html[data-theme="light"] .roster-card,
+html[data-theme="light"] .registration-card {
+    box-shadow: 0 12px 30px rgba(16, 24, 40, 0.08);
+}
+
+html[data-theme="light"] .message-alert {
+    background-color: var(--arena-card);
+    color: var(--arena-text);
+    box-shadow: 0 8px 18px rgba(16, 24, 40, 0.06);
+}
+
+html[data-theme="light"] .tournament-footer {
+    background: var(--arena-surface);
+}
+
+html[data-theme="light"] .profile-chip {
+    background: rgba(16, 24, 40, 0.07);
+    border: 1px solid rgba(16, 24, 40, 0.12);
+    color: var(--arena-text);
+}
+
+html[data-theme="light"] .avatar {
+    border-color: rgba(16, 24, 40, 0.1);
+}
+
+html[data-theme="light"] .meta-chip {
+    background: rgba(59, 91, 253, 0.12);
+    border: 1px solid rgba(59, 91, 253, 0.24);
+    color: var(--arena-text);
+}
+
+html[data-theme="light"] .btn-outline-light {
+    background: #ffffff;
+    color: #1f2937;
+    border-color: #d0d7e2;
+}
+
+html[data-theme="light"] .btn-outline-light:hover {
+    background: #eef2fb;
+    color: #1a2240;
+    border-color: #c0c8d8;
+}
+
+html[data-theme="light"] .badge.bg-gradient {
+    color: #0f172a;
+}
+
+.card-media {
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px 16px 0 0;
+    height: 160px;
+    background: linear-gradient(135deg, rgba(80, 80, 80, 0.25), rgba(60, 60, 60, 0.25));
+}
+
+.card-media.small {
+    height: 120px;
+    border-radius: 14px;
+    margin-bottom: 0.75rem;
+}
+
+.card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.card-media__fallback {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    color: var(--arena-text);
+    font-weight: 800;
+    font-size: 1.4rem;
+    background: linear-gradient(135deg, rgba(85, 104, 221, 0.3), rgba(58, 176, 214, 0.3));
+    letter-spacing: 0.08em;
+}
+
+@media (max-width: 991px) {
+    .card-media {
+        height: 140px;
+    }
+
+    .card-media.small {
+        height: 110px;
+    }
 }

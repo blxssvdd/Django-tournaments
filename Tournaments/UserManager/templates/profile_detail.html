@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Профіль · Tournament Arena{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="card tournament-card h-100 shadow-lg text-center p-4">
+            <div class="mx-auto mb-3 profile-avatar">
+                {% if profile.avatar %}
+                    <img src="{{ profile.avatar.url }}" alt="Аватар" class="img-fluid rounded-circle shadow-sm">
+                {% else %}
+                    <div class="avatar-fallback rounded-circle d-inline-flex align-items-center justify-content-center">
+                        {{ profile.user.username|first|upper }}
+                    </div>
+                {% endif %}
+            </div>
+            <h1 class="h5 fw-bold mb-1">{{ profile.name }}</h1>
+            <p class="text-soft mb-3">{{ profile.user.email|default:"Ел. пошта не вказана" }}</p>
+            <div class="d-flex justify-content-center gap-2 flex-wrap">
+                <a class="btn btn-outline-light btn-sm" href="{% url 'profile_edit' %}">Редагувати</a>
+                <a class="btn btn-glow btn-sm" href="{% url 'password_change_custom' %}">Змінити пароль</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="card tournament-card shadow-lg h-100">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h2 class="h5 fw-semibold mb-1">Дані акаунта</h2>
+                        <p class="text-soft mb-0">Ім'я, поштова адреса та коротке представлення.</p>
+                    </div>
+                    <span class="badge bg-gradient">{{ profile.user.username }}</span>
+                </div>
+                <dl class="row mb-4">
+                    <dt class="col-sm-4 text-soft">Ім'я</dt>
+                    <dd class="col-sm-8">{{ profile.user.first_name|default:"Не вказано" }}</dd>
+
+                    <dt class="col-sm-4 text-soft">Прізвище</dt>
+                    <dd class="col-sm-8">{{ profile.user.last_name|default:"Не вказано" }}</dd>
+
+                    <dt class="col-sm-4 text-soft">Пошта</dt>
+                    <dd class="col-sm-8">{{ profile.user.email|default:"Не вказано" }}</dd>
+
+                    <dt class="col-sm-4 text-soft">Нікнейм</dt>
+                    <dd class="col-sm-8">{{ profile.display_name|default:"Використовується логін" }}</dd>
+
+                    <dt class="col-sm-4 text-soft">Біо</dt>
+                    <dd class="col-sm-8">{{ profile.bio|default:"Розкажіть про себе, щоб команди знали, кого чекають у складі." }}</dd>
+                </dl>
+                <div class="d-flex gap-2 flex-wrap">
+                    <a class="btn btn-outline-light" href="{% url 'get_tournaments' %}">До турнірів</a>
+                    <a class="btn btn-outline-light" href="{% url 'get_teams' %}">До команд</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

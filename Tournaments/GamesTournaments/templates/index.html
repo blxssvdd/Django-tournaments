@@ -6,7 +6,7 @@
 <div class="hero-banner text-center text-light mb-5">
     <h1 class="display-5 fw-bold">Ласкаво просимо до Tournament Arena</h1>
     <p class="lead mb-4">Організовуйте турніри, керуйте командами та створюйте історію перемог.</p>
-    {% if user.is_authenticated %}
+    {% if perms.GamesTournaments.manage_tournaments %}
         <a class="btn btn-glow btn-lg" href="{% url 'add_tournament' %}">Створити турнір</a>
     {% else %}
         <a class="btn btn-outline-light btn-lg" href="{% url 'sign_up' %}">Приєднатись</a>
@@ -50,6 +50,13 @@
         {% for tournament in all_tournaments %}
             <div class="col-md-6 col-xl-4">
                 <div class="card tournament-card h-100 shadow">
+                    <div class="card-media">
+                        {% if tournament.banner %}
+                            <img src="{{ tournament.banner.url }}" alt="Обкладинка {{ tournament.name }}">
+                        {% else %}
+                            <div class="card-media__fallback">{{ tournament.name|first|default:"T" }}</div>
+                        {% endif %}
+                    </div>
                     <div class="card-body d-flex flex-column">
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <span class="badge bg-gradient">{{ tournament.location|default:"Локація не вказана" }}</span>
@@ -59,7 +66,7 @@
                         <p class="description-text flex-grow-1">{{ tournament.description|default:"Опис буде додано пізніше." }}</p>
                         <div class="card-foot mt-3">
                             <span class="text-soft small">ID: {{ tournament.id }}</span>
-                            {% if user.is_authenticated %}
+                            {% if perms.GamesTournaments.manage_teams %}
                                 <a class="btn btn-outline-light btn-sm ms-auto" href="{% url 'add_team' %}">Додати команду</a>
                             {% endif %}
                         </div>

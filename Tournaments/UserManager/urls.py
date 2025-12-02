@@ -5,10 +5,13 @@ from . import views
 
 
 urlpatterns = [
-    path("", views.index, name="index"),
+    path("", views.index, name="user_home"),
     path("sign_up/", views.sign_up, name="sign_up"),
     path("sign_in/", views.sign_in, name="sign_in"),
     path("logout/", views.logout_func, name="logout"),
+    path("profile/", views.profile_view, name="profile"),
+    path("profile/edit/", views.profile_edit, name="profile_edit"),
+    path("profile/password/", views.change_password, name="password_change_custom"),
     path(
         "password_reset/",
         auth_views.PasswordResetView.as_view(

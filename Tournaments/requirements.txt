@@ -1,3 +1,8 @@
 django
 pydantic-settings
 gunicorn
+Pillow
+django-allauth
+requests
+pyjwt
+cryptography

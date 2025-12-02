@@ -1,20 +1,22 @@
 {% extends "base.html" %}
 
-{% block title %}Нова команда · Tournament Arena{% endblock %}
+{% block title %}Приєднатись до команди · Tournament Arena{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-lg-7 col-xl-6">
         <div class="card tournament-card shadow-lg">
             <div class="card-body p-4">
-                <h1 class="card-title text-soft text-center mb-3">Створити команду</h1>
-                <p class="text-soft text-center mb-4">Опишіть команду та оберіть турнір, у якому вона виступає.</p>
-                <form method="post" enctype="multipart/form-data" novalidate>
+                <h1 class="card-title text-center mb-3">Приєднатися до команди</h1>
+                <p class="text-soft text-center mb-4">
+                    Оберіть команду і додайте невеликий опис, щоб капітан знав про вас більше.
+                </p>
+                <form method="post" novalidate>
                     {% csrf_token %}
                     {{ form.as_p }}
                     <div class="d-flex justify-content-between align-items-center mt-4">
                         <a class="btn btn-outline-light" href="{% url 'get_teams' %}">Назад до команд</a>
-                        <button type="submit" class="btn btn-glow">Зберегти команду</button>
+                        <button type="submit" class="btn btn-glow">Приєднатись</button>
                     </div>
                 </form>
             </div>
