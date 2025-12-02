@@ -1,3 +1,31 @@
+# Environments and secrets
 .env
-.venv
-__pycache__
+.env.*
+.venv/
+venv/
+
+# Python caches
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Django artifacts
+db.sqlite3
+*.log
+media/
+static/
+staticfiles/
+
+# Tooling
+.idea/
+.vscode/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# OS
+.DS_Store
