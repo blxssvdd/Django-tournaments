@@ -3,13 +3,17 @@ from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.core.paginator import Paginator
 from django.db.models import Case, Count, IntegerField, Sum, Value, When, Prefetch
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpRequest
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
 from django.urls import reverse
 
 from .forms import TournamentForm, TeamForm, PlayerForm, JoinTeamForm
 from .models import Tournament, Team, Player, Registration
+from .serializers import TournamentSerializer
 
 # Create your views here.
 
@@ -44,6 +48,13 @@ def index(request):
             "all_tournaments": tournaments
         }
     )
+
+
+@api_view(["GET"])
+def tournaments_api(request: HttpRequest):
+    tournaments = Tournament.objects.all().order_by("-date", "name")
+    serializer = TournamentSerializer(instance=tournaments, many=True)
+    return Response(serializer.data)
 
 
 @login_required(login_url="/users/sign_in/")
